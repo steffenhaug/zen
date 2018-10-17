@@ -1,0 +1,118 @@
+JUMP !main
+
+@handleinput
+    PUSH        15
+    INPUT       15
+
+@check_a
+    ANDI        0 15 0b00000001
+    JZ          !a_notpressed
+
+    JUMP        !check_b
+@a_notpressed
+
+@check_b
+    ANDI        0 15 0b00000010
+    JZ          !b_notpressed
+
+    JUMP        !check_x
+@b_notpressed
+
+@check_x
+    ANDI        0 15 0b00000100
+    JZ          !x_notpressed
+
+    JUMP        !check_y
+@x_notpressed
+
+@check_y
+    ANDI        0 15 0b00001000
+    JZ          !y_notpressed
+
+    JUMP        !check_dn
+@y_notpressed
+
+@check_dn
+    ANDI        0 15 0b00010000
+    JZ          !dn_notpressed
+
+    JUMP        !check_rt
+@dn_notpressed
+
+@check_rt
+    ANDI        0 15 0b00100000
+    JZ          !rt_notpressed
+
+    JUMP        !check_lf
+@rt_notpressed
+
+@check_lf
+    ANDI        0 15 0b01000000
+    JZ          !lf_notpressed
+
+    JUMP        !check_up
+@lf_notpressed
+
+@check_up
+    ANDI        0 15 0b10000000
+    JZ          !up_notpressed
+
+    JUMP        !done_handleinput
+@up_notpressed
+
+@done_handleinput
+    POP         15
+    RET
+
+@cls
+    PUSH        1
+    PUSH        2
+    PUSH        3
+    PUSH        4
+
+    LOADI       1   0
+    LOADI       2   0
+    LOADI       3   160
+    LOADI       4   144
+@cls_ver
+@cls_hor
+    COLOR       1   2   63
+    INC         1
+
+    COMP        1   3
+    JNEQ        !cls_hor
+    XOR         1   1   1
+
+    INC         2
+    
+    COMP        2   4
+    JNEQ        !cls_ver
+    XOR         1   1   1
+
+    POP         4
+    POP         3
+    POP         2
+    POP         1
+    RET
+
+
+@main
+    LOADI       63  0b0
+    LOADI       62  0b0
+    LOADI       8   159
+    LOADI       9   143
+@gameloop
+    JUMPDT      !render
+    CALL        !handleinput
+
+    INC         62
+
+@render
+    CALL        !cls
+
+    COLOR       8   9   62
+    
+    DRAW
+    JUMP        !gameloop
+
+    HALT
