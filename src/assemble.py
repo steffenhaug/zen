@@ -1,4 +1,3 @@
-#! /usr/bin/python3
 import sys
 
 def is_def(s): return s[0] == '@'
